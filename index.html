@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>user@portfolio:~$ Terminal Portfolio</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0c0c0c;
+            color: #00ff00;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        .terminal {
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #1e1e1e;
+            border-radius: 8px 8px 0 0;
+            border: 1px solid #333;
+        }
+
+        .terminal-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .btn.close { background: #ff5f56; }
+        .btn.minimize { background: #ffbd2e; }
+        .btn.maximize { background: #27ca3f; }
+
+        .terminal-title {
+            margin-left: 15px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .terminal-body {
+            background: #0c0c0c;
+            border: 1px solid #333;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 20px;
+            min-height: calc(100vh - 100px);
+        }
+
+        .prompt {
+            color: #00ff00;
+            margin-bottom: 10px;
+        }
+
+        .user { color: #00ff00; }
+        .at { color: #ffffff; }
+        .host { color: #00ffff; }
+        .path { color: #ffff00; }
+        .dollar { color: #ffffff; }
+
+        .command {
+            color: #ffffff;
+            margin-left: 10px;
+        }
+
+        .output {
+            margin: 10px 0 20px 0;
+            color: #cccccc;
+        }
+
+        .ascii-art {
+            color: #00ff00;
+            font-size: 10px;
+            line-height: 1.2;
+            margin: 20px 0;
+            white-space: pre;
+        }
+
+        .section {
+            margin: 30px 0;
+            border-left: 3px solid #00ff00;
+            padding-left: 15px;
+        }
+
+        .section-title {
+            color: #00ffff;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .file-list {
+            list-style: none;
+        }
+
+        .file-list li {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .file-icon {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .file-name {
+            color: #00ff00;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-name:hover {
+            color: #ffffff;
+            text-shadow: 0 0 10px #00ff00;
+        }
+
+        .executable { color: #ff6b6b; }
+        .directory { color: #4ecdc4; font-weight: bold; }
+        .text-file { color: #ffe66d; }
+
+        .command-input {
+            display: flex;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .input-prompt {
+            color: #00ff00;
+            margin-right: 10px;
+        }
+
+        #commandLine {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            outline: none;
+            flex: 1;
+        }
+
+        .cursor {
+            color: #00ff00;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .skill-item {
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 3px solid #00ff00;
+        }
+
+        .skill-name {
+            color: #00ffff;
+            font-weight: 500;
+        }
+
+        .skill-level {
+            color: #ffff00;
+            font-size: 12px;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contact-icon {
+            color: #00ff00;
+        }
+
+        .contact-link {
+            color: #00ffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .contact-link:hover {
+            color: #ffffff;
+            text-shadow: 0 0 5px #00ffff;
+        }
+
+        .project-item {
+            background: #111;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #ff6b6b;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            transition: all 0.3s ease;
+        }
+
+        .project-item:hover {
+            background: #1a1a1a;
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 255, 0, 0.1);
+        }
+
+        .project-content {
+            flex: 1;
+        }
+
+        .project-image {
+            flex-shrink: 0;
+            width: 200px;
+            height: 120px;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid #333;
+            background: #222;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .project-image:hover {
+            border-color: #00ff00;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .project-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .project-image-placeholder {
+            color: #666;
+            font-size: 12px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .project-title {
+            color: #ff6b6b;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .project-desc {
+            color: #cccccc;
+            margin-bottom: 10px;
+        }
+
+        .project-tech {
+            color: #ffff00;
+            font-size: 12px;
+        }
+
+        .project-links {
+            margin-top: 10px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .project-link {
+            color: #00ffff;
+            text-decoration: none;
+            font-size: 12px;
+            padding: 4px 8px;
+            border: 1px solid #00ffff;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .project-link:hover {
+            background: #00ffff;
+            color: #000;
+        }
+
+        .typing-animation {
+            overflow: hidden;
+            border-right: 2px solid #00ff00;
+            white-space: nowrap;
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #00ff00; }
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        /* Image modal */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .image-modal-content {
+            display: block;
+            margin: auto;
+            max-width: 90%;
+            max-height: 90%;
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .image-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #ff6b6b;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .image-modal-close:hover {
+            color: #fff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .project-item {
+                flex-direction: column;
+            }
+            
+            .project-image {
+                width: 100%;
+                height: 150px;
+                order: -1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas class="matrix-bg" id="matrixCanvas"></canvas>
+    
+    <!-- Image Modal -->
+    <div id="imageModal" class="image-modal">
+        <span class="image-modal-close">&times;</span>
+        <img class="image-modal-content" id="modalImage">
+    </div>
+    
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <div class="btn close"></div>
+                <div class="btn minimize"></div>
+                <div class="btn maximize"></div>
+            </div>
+            <div class="terminal-title">vishnu@portfolio: ~</div>
+        </div>
+        
+        <div class="terminal-body">
+            <div class="prompt">
+                <span class="user">vishnu</span><span class="at">@</span><span class="host">portfolio</span>:<span class="path">~</span><span class="dollar">$</span>
+                <span class="command">whoami</span>
+            </div>
+            
+            <div class="ascii-art">
+    ██╗   ██╗██╗███████╗██╗  ██╗███╗   ██╗██╗   ██╗    ██████╗  █████╗      ██╗
+    ██║   ██║██║██╔════╝██║  ██║████╗  ██║██║   ██║    ██╔══██╗██╔══██╗     ██║
+    ██║   ██║██║███████╗███████║██╔██╗ ██║██║   ██║    ██████╔╝███████║     ██║
+    ╚██╗ ██╔╝██║╚════██║██╔══██║██║╚██╗██║██║   ██║    ██╔══██╗██╔══██║██   ██║
+     ╚████╔╝ ██║███████║██║  ██║██║ ╚████║╚██████╔╝    ██║  ██║██║  ██║╚█████╔╝
+      ╚═══╝  ╚═╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝     ╚═╝  ╚═╝╚═╝  ╚═╝ ╚════╝  
+            </div>
+
+            <div class="output typing-animation">
+                Cybersecurity Specialist | Ethical Hacker | Python Developer
+            </div>
+
+            <div class="prompt">
+                <span class="user">user</span><span class="at">@</span><span class="host">portfolio</span>:<span class="path">~</span><span class="dollar">$</span>
+                <span class="command">ls -la</span>
+            </div>
+
+            <div class="output">
+                <div>total 42</div>
+                <div>drwxr-xr-x  8 user user 4096 Jun 14 2025 .</div>
+                <div>drwxr-xr-x  3 root root 4096 Jan 01 2025 ..</div>
+                <div>-rw-r--r--  1 user user  220 Jun 14 2025 .profile</div>
+                <div>drwxr-xr-x  2 user user 4096 Jun 14 2025 about/</div>
+                <div>drwxr-xr-x  2 user user 4096 Jun 14 2025 skills/</div>
+                <div>drwxr-xr-x  2 user user 4096 Jun 14 2025 projects/</div>
+                <div>drwxr-xr-x  2 user user 4096 Jun 14 2025 contact/</div>
+                <div>-rwxr-xr-x  1 user user 2048 Jun 14 2025 resume.sh*</div>
+            </div>
+
+            <div class="section">
+                <div class="prompt">
+                    <span class="user">user</span><span class="at">@</span><span class="host">portfolio</span>:<span class="path">~</span><span class="dollar">$</span>
+                    <span class="command">cat about/README.md</span>
+                </div>
+                
+                <div class="section-title"># About Me</div>
+                <div class="output">
+                    Hello! I'm Vishnu Raj J, a motivated cybersecurity specialist with a strong foundation in ethical hacking 
+                    and penetration testing. Currently pursuing MSc in Cybersecurity and Ethical Hacking from Yenepoya Deemed University.
+                    <br><br>
+                    I'm passionate about developing security tools and tackling real-world cybersecurity challenges. 
+                    My expertise spans from vulnerability assessment to incident response, with hands-on experience in 
+                    various security frameworks and tools.
+                    <br><br>
+                    🔐 Always learning, always securing, always improving.
+                    <br>📍 Based in Calicut, Kerala
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prompt">
+                    <span class="user">user</span><span class="at">@</span><span class="host">portfolio</span>:<span class="path">~</span><span class="dollar">$</span>
+                    <span class="command">ls skills/</span>
+                </div>
+                
+                <div class="section-title"># Technical Skills</div>
+                <div class="skills-grid">
+                    <div class="skill-item">
+                        <div class="skill-name">Python</div>
+                        <div class="skill-level">██████████ 90%</div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">Penetration Testing</div>
+                        <div class="skill-level">█████████░ 85%</div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">Network Security</div>
+                        <div class="skill-level">████████░░ 80%</div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">SIEM (Splunk)</div>
+                        <div class="skill-level">███████░░░ 75%</div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">Wireshark/Nmap</div>
+                        <div class="skill-level">█████████░ 85%</div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">Burp Suite</div>
+                        <div class="skill-level">████████░░ 80%</div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">Metasploit</div>
+                        <div class="skill-level">███████░░░ 70%</div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">Web Development</div>
+                        <div class="skill-level">████████░░ 75%</div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">Incident Response</div>
+                        <div class="skill-level">███████░░░ 70%</div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">Threat Detection</div>
+                        <div class="skill-level">████████░░ 75%</div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">OWASP Framework</div>
+                        <div class="skill-level">███████░░░ 70%</div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-name">DevSecOps</div>
+                        <div class="skill-level">██████░░░░ 65%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prompt">
+                    <span class="user">user</span><span class="at">@</span><span class="host">portfolio</span>:<span class="path">~</span><span class="dollar">$</span>
+                    <span class="command">find projects/ -name "*.md" -exec cat {} \;</span>
+                </div>
+                
+                <div class="section-title"># Featured Projects</div>
+                
+                <div class="project-item">
+                    <div class="project-content">
+                        <div class="project-title">
+                            🛡️ CryptoGuardML - Crypto-Jacking Detection Tool
+                        </div>
+                        <div class="project-desc">
+                            Machine learning-powered tool to detect cryptojacking attempts by monitoring system resource usage 
+                            and network activity patterns. Includes browser extension, web application, and Python terminal script.
+                        </div>
+                        <div class="project-tech">Tech Stack: Python • Flask • JavaScript • Machine Learning • Browser Extension</div>
+                        <div class="project-links">
+                            <a href="https://github.com/vishnuvrj7/CryptoGuardML" target="_blank" class="project-link">GitHub</a>
+                            <a href="#" class="project-link">Live Demo</a>
+                        </div>
+                    </div>
+                    <div class="project-image" onclick="openImageModal('https://via.placeholder.com/400x240/1a1a1a/00ff00?text=CryptoGuardML+Screenshot')">
+                        <img src="https://via.placeholder.com/400x240/1a1a1a/00ff00?text=CryptoGuardML+Screenshot" alt="CryptoGuardML Screenshot" onerror="this.parentElement.innerHTML='<div class=project-image-placeholder>🛡️<br>Add your project<br>screenshot here</div>'">
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <div class="project-content">
+                        <div class="project-title">
+                            🔍 VulnHunt – Lightweight Vulnerability Scanner
+                        </div>
+                        <div class="project-desc">
+                            Python-based vulnerability scanner that detects open ports, associated services, and potential 
+                            CVEs using the Vulners API. Efficient tool for security assessments and penetration testing.
+                        </div>
+                        <div class="project-tech">Tech Stack: Python • Vulners API • Network Scanning • CVE Database</div>
+                        <div class="project-links">
+                            <a href="https://github.com/vishnuvrj7/VulnHunt" target="_blank" class="project-link">GitHub</a>
+                            <a href="#" class="project-link">Documentation</a>
+                        </div>
+                    </div>
+                    <div class="project-image" onclick="openImageModal('https://via.placeholder.com/400x240/1a1a1a/ff6b6b?text=VulnHunt+Terminal+Interface')">
+                        <img src="https://via.placeholder.com/400x240/1a1a1a/ff6b6b?text=VulnHunt+Terminal+Interface" alt="VulnHunt Screenshot" onerror="this.parentElement.innerHTML='<div class=project-image-placeholder>🔍<br>Add your project<br>screenshot here</div>'">
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <div class="project-content">
+                        <div class="project-title">
+                            🏖️ Sandbox-Extension
+                        </div>
+                        <div class="project-desc">
+                            Sandboxed browser extension that allows users to open links in a secure environment, 
+                            ensuring safe browsing without affecting the primary system or browsing experience.
+                        </div>
+                        <div class="project-tech">Tech Stack: JavaScript • Browser Extension • Sandboxing • Security</div>
+                        <div class="project-links">
+                            <a href="https://github.com/vishnuvrj7/Sandbox-Extension" target="_blank" class="project-link">GitHub</a>
+                            <a href="#" class="project-link">Install</a>
+                        </div>
+                    </div>
+                    <div class="project-image" onclick="openImageModal('https://via.placeholder.com/400x240/1a1a1a/4ecdc4?text=Sandbox+Extension+UI')">
+                        <img src="https://via.placeholder.com/400x240/1a1a1a/4ecdc4?text=Sandbox+Extension+UI" alt="Sandbox Extension Screenshot" onerror="this.parentElement.innerHTML='<div class=project-image-placeholder>🏖️<br>Add your project<br>screenshot here</div>'">
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <div class="project-content">
+                        <div class="project-title">
+                            🎓 Freelearniverse
+                        </div>
+                        <div class="project-desc">
+                            Educational platform offering free resources on coding, interviews, and tech tutorials. 
+                            Created engaging content to promote hands-on learning for students and professionals.
+                        </div>
+                        <div class="project-tech">Tech Stack: Web Development • Content Creation • Educational Platform</div>
+                        <div class="project-links">
+                            <a href="https://freelearniverse.wordpress.com" target="_blank" class="project-link">Visit Site</a>
+                            <a href="#" class="project-link">Blog</a>
+                        </div>
+                    </div>
+                    <div class="project-image" onclick="openImageModal('https://via.placeholder.com/400x240/1a1a1a/ffe66d?text=Freelearniverse+Website')">
+                        <img src="https://via.placeholder.com/400x240/1a1a1a/ffe66d?text=Freelearniverse+Website" alt="Freelearniverse Screenshot" onerror="this.parentElement.innerHTML='<div class=project-image-placeholder>🎓<br>Add your project<br>screenshot here</div>'">
+                    </div>
+                </div>
+
+                <div class="project-item">
+                    <div class="project-content">
+                        <div class="project-title">🚩 Custom CTF Platform</div>
+                        <div class="project-desc">
+                            Designed and implemented customized Capture The Flag challenges for college competitions, 
+                            focusing on SQL injection, reverse engineering, and cryptography with varying difficulty levels.
+                        </div>
+                        <div class="project-tech">Tech Stack: Security Challenges • Web Security • Cryptography • Challenge Design</div>
+                        <div class="project-links">
+                            <a href="#" class="project-link">Demo</a>
+                            <a href="#" class="project-link">Challenges</a>
+                        </div>
+                    </div>
+                    <div class="project-image" onclick="openImageModal('https://via.placeholder.com/400x240/1a1a1a/ff6b6b?text=CTF+Platform+Interface')">
+                        <img src="https://via.placeholder.com/400x240/1a1a1a/ff6b6b?text=CTF+Platform+Interface" alt="CTF Platform Screenshot" onerror="this.parentElement.innerHTML='<div class=project-image-placeholder>🚩<br>Add your project<br>screenshot here</div>'">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prompt">
+                    <span class="user">user</span><span class="at">@</span><span class="host">portfolio</span>:<span class="path">~</span><span class="dollar">$</span>
+                    <span class="command">cat contact/info.txt</span>
+                </div>
+                
+                <div class="section-title"># Get In Touch</div>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <span class="contact-icon">📧</span>
+                        <a href="mailto:vishnuvrj16@gmail.com" class="contact-link">vishnuvrj16@gmail.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">🐙</span>
+                        <a href="https://github.com/vishnuvrj7" class="contact-link">github.com/vishnuvrj7</a>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">💼</span>
+                        <a href="https://linkedin.com/in/vishnuvrj" class="contact-link">linkedin.com/in/vishnuvrj</a>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-icon">📍</span>
+                        <span class="contact-link">Kozhikode, Kerala, India</span>
+                    </div>
+                    <div class="contact-item">                         
+                        <span class="contact-icon">⤓</span>                         
+                        <a href="https://drive.google.com/file/d/1CsMqjIA5PtlPpA7j87s_JElybrcBh1JM/view?usp=drive_link" class="contact-link">resume</a>                     
+                    </div>
+                </div>
+            </div>
+
+            <div class="command-input">
+                <span class="input-prompt">
+                    <span class="user">user</span><span class="at">@</span><span class="host">portfolio</span>:<span class="path">~</span><span class="dollar">$</span>
+                </span>
+                <input type="text" id="commandLine" placeholder="Type 'help' for available commands">
+                <span class="cursor">█</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Matrix background effect
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+    
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    
+        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
+        const matrixArray = matrix.split("");
+    
+        const fontSize = 10;
+        const columns = canvas.width / fontSize;
+    
+        const drops = [];
+        for (let x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+    
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+            ctx.fillStyle = '#00FF00';
+            ctx.font = fontSize + 'px monospace';
+    
+            for (let i = 0; i < drops.length; i++) {
+                const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+    
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+    
+        setInterval(drawMatrix, 35);
+
+        // Image modal functionality
+        function openImageModal(imageSrc) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            modal.style.display = 'block';
+            modalImg.src = imageSrc;
+        }
+
+        function closeImageModal() {
+            document.getElementById('imageModal').style.display = 'none';
+        }
+
+        // Close modal when clicking the X
+        document.querySelector('.image-modal-close').addEventListener('click', closeImageModal);
+
+        // Close modal when clicking outside the image
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeImageModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeImageModal();
+            }
+        });
+    
+        // Command line functionality
+        const commandLine = document.getElementById('commandLine');
+        const commands = {
+            'help': `Available commands:
+    help       - Show this help message
+    ls         - List directory contents
+    pwd        - Print working directory
+    whoami     - Display current user
+    cd archive - Go to project archive
+    date       - Show current date and time
+    screenshot - Take a screenshot of projects
+    clear      - Clear the terminal`,
+            
+            'ls': `about/     skills/    projects/   archive/   contact/   resume.sh*`,
+            
+            'pwd': `/home/user`,
+            
+            'whoami': `vishnu - Cybersecurity Specialist & Ethical Hacker`,
+            
+            'date': () => new Date().toString(),
+            
+            'screenshot': `📸 Project screenshots loaded successfully!
+Click on any project image to view in full size.`,
+            
+            'cd archive': () => {
+                window.location.href = 'archive.html';
+                return 'Navigating to archive...';
+            },
+            
+            'clear': 'CLEAR_SCREEN'
+        };
+    
+        commandLine.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const command = this.value.trim().toLowerCase();
+                const output = document.createElement('div');
+                
+                // Add command prompt
+                const promptDiv = document.createElement('div');
+                promptDiv.className = 'prompt';
+                promptDiv.innerHTML = `<span class="user">user</span><span class="at">@</span><span class="host">portfolio</span>:<span class="path">~</span><span class="dollar">$</span> <span class="command">${this.value}</span>`;
+                
+                if (command === 'clear') {
+                    document.querySelector('.terminal-body').innerHTML = `
+                        <div class="prompt">
+                            <span class="user">user</span><span class="at">@</span><span class="host">portfolio</span>:<span class="path">~</span><span class="dollar">$</span>
+                        </div>
+                        <div class="command-input">
+                            <span class="input-prompt">
+                                <span class="user">user</span><span class="at">@</span><span class="host">portfolio</span>:<span class="path">~</span><span class="dollar">$</span>
+                            </span>
+                            <input type="text" id="commandLine" placeholder="Type 'help' for available commands">
+                            <span class="cursor">█</span>
+                        </div>
+                    `;
+                    // Re-attach event listener
+                    document.getElementById('commandLine').addEventListener('keypress', arguments.callee);
+                } else {
+                    const outputDiv = document.createElement('div');
+                    outputDiv.className = 'output';
+                    
+                    if (commands[command]) {
+                        if (typeof commands[command] === 'function') {
+                            outputDiv.innerHTML = `<pre>${commands[command]()}</pre>`;
+                        } else {
+                            outputDiv.innerHTML = `<pre>${commands[command]}</pre>`;
+                        }
+                    } else if (command) {
+                        outputDiv.innerHTML = `<span style="color: #ff6b6b;">bash: ${command}: command not found</span><br>Type 'help' to see available commands.`;
+                    }
+                    
+                    // Insert before command input
+                    const commandInput = document.querySelector('.command-input');
+                    commandInput.parentNode.insertBefore(promptDiv, commandInput);
+                    commandInput.parentNode.insertBefore(outputDiv, commandInput);
+                }
+                
+                this.value = '';
+                this.scrollIntoView();
+            }
+        });
+    
+        // Auto-focus on command line
+        commandLine.focus();
+        
+        // Prevent losing focus
+        document.addEventListener('click', () => {
+            commandLine.focus();
+        });
+    
+        // Window resize handler for matrix
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+    
+</body>
+</html>

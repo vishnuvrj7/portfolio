@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vishnu@archive:~$ Project Archive</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #00ff00;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .terminal {
+            min-height: 100vh;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #1a1a1a;
+            border-radius: 8px 8px 0 0;
+            border: 1px solid #333;
+        }
+
+        .terminal-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .btn.close { background: #ff5f56; }
+        .btn.minimize { background: #ffbd2e; }
+        .btn.maximize { background: #27ca3f; }
+
+        .terminal-title {
+            margin-left: 15px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .terminal-body {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 20px;
+        }
+
+        .prompt {
+            color: #00ff00;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .user { color: #00ff00; }
+        .at { color: #ffffff; }
+        .host { color: #00ffff; }
+        .path { color: #ffff00; }
+        .dollar { color: #ffffff; }
+        .command { color: #ffffff; margin-left: 10px; }
+
+        .ascii-art {
+            color: #ff6b6b;
+            font-size: 8px;
+            line-height: 1.1;
+            margin: 20px 0;
+            white-space: pre;
+            text-align: center;
+        }
+
+        .stats-box {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #00ff00;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            color: #00ff00;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 10px;
+            text-transform: uppercase;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .project-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 6px;
+            padding: 15px;
+            border-left: 4px solid #ffff00;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover {
+            border-left-color: #00ff00;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.1);
+        }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .project-icon {
+            color: #ff6b6b;
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        .project-title {
+            color: #ffff00;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .project-desc {
+            color: #cccccc;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .project-tech {
+            color: #00ffff;
+            font-size: 10px;
+            margin-bottom: 8px;
+        }
+
+        .project-status {
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+
+        .status-active { 
+            background: rgba(0, 255, 0, 0.2); 
+            color: #00ff00; 
+        }
+        .status-archived { 
+            background: rgba(255, 255, 0, 0.2); 
+            color: #ffff00; 
+        }
+        .status-experimental { 
+            background: rgba(255, 107, 107, 0.2); 
+            color: #ff6b6b; 
+        }
+        .status-learning { 
+            background: rgba(0, 255, 255, 0.2); 
+            color: #00ffff; 
+        }
+
+        .section-title {
+            color: #ff6b6b;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            text-transform: uppercase;
+            text-align: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .back-link {
+            color: #00ffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 20px 0;
+        }
+
+        .back-link:hover {
+            color: #ffffff;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .command-tip {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 20px 0;
+            font-size: 11px;
+            color: #888;
+        }
+
+        .highlight {
+            color: #00ffff;
+        }
+
+        /* Matrix background effect */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.03;
+        }
+
+        @media (max-width: 768px) {
+            .terminal {
+                padding: 10px;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .ascii-art {
+                font-size: 6px;
+            }
+            
+            .prompt {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas class="matrix-bg" id="matrixCanvas"></canvas>
+    
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <div class="btn close"></div>
+                <div class="btn minimize"></div>
+                <div class="btn maximize"></div>
+            </div>
+            <div class="terminal-title">vishnu@archive: ~/projects</div>
+        </div>
+        
+        <div class="terminal-body">
+            <div class="prompt">
+                <span class="user">vishnu</span><span class="at">@</span><span class="host">archive</span>:<span class="path">~/projects</span><span class="dollar">$</span>
+                <span class="command">cat banner.txt</span>
+            </div>
+            
+            <div class="ascii-art">
+ ██████╗ ██████╗  ██████╗      ██╗███████╗ ██████╗████████╗███████╗
+ ██╔══██╗██╔══██╗██╔═══██╗     ██║██╔════╝██╔════╝╚══██╔══╝██╔════╝
+ ██████╔╝██████╔╝██║   ██║     ██║█████╗  ██║        ██║   ███████╗
+ ██╔═══╝ ██╔══██╗██║   ██║██   ██║██╔══╝  ██║        ██║   ╚════██║
+ ██║     ██║  ██║╚██████╔╝╚█████╔╝███████╗╚██████╗   ██║   ███████║
+ ╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚════╝ ╚══════╝ ╚═════╝   ╚═╝   ╚══════╝
+            </div>
+
+            <div class="prompt">
+                <span class="user">vishnu</span><span class="at">@</span><span class="host">archive</span>:<span class="path">~/projects</span><span class="dollar">$</span>
+                <span class="command">ls -la</span>
+            </div>
+
+            <div class="stats-box">
+                <div style="color: #ff6b6b; font-weight: 600; margin-bottom: 10px;">📊 ARCHIVE STATS</div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">25+</div>
+                        <div class="stat-label">Projects</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">50k+</div>
+                        <div class="stat-label">Lines</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">Languages</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Years</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="command-tip">
+                💡 <span class="highlight">Tip:</span> This archive showcases my cybersecurity projects, tools, and learning journey.
+                <br>🔗 <a href="whoami.html" class="back-link">cd ../portfolio</a>
+            </div>
+
+            <div class="section-title">🚀 Featured Projects</div>
+
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-header">
+                        <span class="project-icon">🤖</span>
+                        <span class="project-title">AI Phishing Detector</span>
+                    </div>
+                    <div class="project-desc">
+                        ML model using NLP to detect phishing emails and malicious URLs with behavioral analysis.
+                    </div>
+                    <div class="project-tech">Python • TensorFlow • NLP • Scikit-learn</div>
+                    <div class="project-status status-experimental">Experimental</div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <span class="project-icon">🔐</span>
+                        <span class="project-title">Password Analyzer</span>
+                    </div>
+                    <div class="project-desc">
+                        CLI tool that analyzes password strength using entropy calculations and pattern recognition.
+                    </div>
+                    <div class="project-tech">Python • Regex • Entropy Analysis • CLI</div>
+                    <div class="project-status status-archived">Archived</div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <span class="project-icon">🌐</span>
+                        <span class="project-title">Web Security Scanner</span>
+                    </div>
+                    <div class="project-desc">
+                        Lightweight scanner for missing security headers with automated remediation suggestions.
+                    </div>
+                    <div class="project-tech">Python • Requests • Security Headers • Web</div>
+                    <div class="project-status status-archived">Archived</div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <span class="project-icon">🔮</span>
+                        <span class="project-title">Threat Intel Aggregator</span>
+                    </div>
+                    <div class="project-desc">
+                        Automated system collecting threat intelligence from multiple sources with correlation engine.
+                    </div>
+                    <div class="project-tech">Python • APIs • Data Correlation • Threat Intel</div>
+                    <div class="project-status status-experimental">Experimental</div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <span class="project-icon">🎯</span>
+                        <span class="project-title">CTF Solutions</span>
+                    </div>
+                    <div class="project-desc">
+                        Collection of solutions for crypto, web exploitation, and forensics challenges with writeups.
+                    </div>
+                    <div class="project-tech">Python • Cryptography • Web Exploitation • CTF</div>
+                    <div class="project-status status-learning">Learning</div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <span class="project-icon">📱</span>
+                        <span class="project-title">Mobile Security Kit</span>
+                    </div>
+                    <div class="project-desc">
+                        Android security testing scripts including APK analysis and vulnerability assessment tools.
+                    </div>
+                    <div class="project-tech">Python • Android • APK Analysis • Mobile Security</div>
+                    <div class="project-status status-archived">Archived</div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <span class="project-icon">⚡</span>
+                        <span class="project-title">Dev Environment Setup</span>
+                    </div>
+                    <div class="project-desc">
+                        Automated scripts for security testing environment setup with tool installation and config.
+                    </div>
+                    <div class="project-tech">Bash • Python • Automation • DevOps</div>
+                    <div class="project-status status-active">Active</div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-header">
+                        <span class="project-icon">🔬</span>
+                        <span class="project-title">Malware Analysis Lab</span>
+                    </div>
+                    <div class="project-desc">
+                        Virtual lab for safe malware analysis with automated sandbox and behavioral analysis scripts.
+                    </div>
+                    <div class="project-tech">Python • VirtualBox • Malware Analysis • Sandbox</div>
+                    <div class="project-status status-learning">Learning</div>
+                </div>
+            </div>
+
+            <div class="prompt">
+                <span class="user">vishnu</span><span class="at">@</span><span class="host">archive</span>:<span class="path">~/projects</span><span class="dollar">$</span>
+                <span class="command">echo "Thanks for exploring my archive! 🚀"</span>
+            </div>
+            
+            <div style="color: #cccccc; margin: 20px 0;">
+                Thanks for exploring my archive! 🚀
+                <br><br>
+                <a href="whoami.html" class="back-link">← Back to main portfolio</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Matrix background effect
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*";
+        const matrixArray = matrix.split("");
+        const fontSize = 10;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for (let x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#FF6B6B';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 50);
+
+        // Resize canvas on window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
