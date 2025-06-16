@@ -350,6 +350,14 @@
             z-index: -1;
             opacity: 0.1;
         }
+        .no-color-change {
+        color: inherit;
+        text-decoration: none;
+    }
+    .no-color-change:hover, .no-color-change:visited, .no-color-change:active {
+        color: inherit;
+        text-decoration: none;
+    }
 
         /* Image modal */
         .image-modal {
@@ -453,17 +461,29 @@
                 <span class="user">user</span><span class="at">@</span><span class="host">portfolio</span>:<span class="path">~</span><span class="dollar">$</span>
                 <span class="command">ls -la</span>
             </div>
-
             <div class="output">
                 <div>total 42</div>
                 <div>drwxr-xr-x  8 user user 4096 Jun 14 2025 .</div>
                 <div>drwxr-xr-x  3 root root 4096 Jan 01 2025 ..</div>
                 <div>-rw-r--r--  1 user user  220 Jun 14 2025 .profile</div>
-                <div>drwxr-xr-x  2 user user 4096 Jun 14 2025 about/</div>
-                <div>drwxr-xr-x  2 user user 4096 Jun 14 2025 skills/</div>
-                <div>drwxr-xr-x  2 user user 4096 Jun 14 2025 projects/</div>
-                <div>drwxr-xr-x  2 user user 4096 Jun 14 2025 contact/</div>
-                <div>-rwxr-xr-x  1 user user 2048 Jun 14 2025 resume.sh*</div>
+                <div>
+                    <a href="#about-section" class="no-color-change">drwxr-xr-x  2 user user 4096 Jun 14 2025 about/</a>
+                </div>
+                <div>
+                    <a href="#skills" class="no-color-change">drwxr-xr-x  2 user user 4096 Jun 14 2025 skills/</a>
+                </div>
+                <div>
+                    <a href="#projects" class="no-color-change">drwxr-xr-x  2 user user 4096 Jun 14 2025 projects/</a>
+                </div>
+                <div>
+                    <a href="#contact" class="no-color-change">drwxr-xr-x  2 user user 4096 Jun 14 2025 contact/</a>
+                </div>
+                <div>
+                    <a href="https://drive.google.com/file/d/1hDUdgrakE27DyZenZemIpaqLMuie7K44/view?usp=drive_link" class="no-color-change">-rwxr-xr-x  1 user user 2048 Jun 14 2025 resume.sh*</a>
+                </div>
+                <div>
+                    <a href="archive.html" class="no-color-change">drwxr-xr-x  2 user user 4096 Jun 14 2025 archive/</a>
+                </div>
             </div>
 
             <div class="section">
@@ -472,11 +492,14 @@
                     <span class="command">cat about/README.md</span>
                 </div>
                 
-                <div class="section-title"># About Me</div>
+                <div id="about-section" class="section-title"># About Me</div>
                 <div class="output">
-                  Hi there! I'm Vishnu, a cybersecurity enthusiast with a knack for ethical hacking and penetration testing. Right now, I’m diving deeper into the world of cybersecurity as an MSc student in Cybersecurity and Ethical Hacking at Yenepoya Deemed University.
+                    Hello! I'm Vishnu Raj J, a motivated cybersecurity specialist with a strong foundation in ethical hacking 
+                    and penetration testing. Currently pursuing MSc in Cybersecurity and Ethical Hacking from Yenepoya Deemed University.
                     <br><br>
-                    I love building security tools and tackling real-world challenges in the digital space. From identifying vulnerabilities to managing incident responses, I’ve had hands-on experience with various security frameworks and tools. For me, cybersecurity isn’t just a career—it’s a passion that keeps me curious, creative, and ready to make the online world safer for everyone.
+                    I'm passionate about developing security tools and tackling real-world cybersecurity challenges. 
+                    My expertise spans from vulnerability assessment to incident response, with hands-on experience in 
+                    various security frameworks and tools.
                     <br><br>
                     🔐 Always learning, always securing, always improving.
                     <br>📍 Based in Calicut, Kerala
@@ -489,7 +512,7 @@
                     <span class="command">ls skills/</span>
                 </div>
                 
-                <div class="section-title"># Technical Skills</div>
+                <div id=skills class="section-title"># Technical Skills</div>
                 <div class="skills-grid">
                     <div class="skill-item">
                         <div class="skill-name">Python</div>
@@ -548,7 +571,7 @@
                     <span class="command">find projects/ -name "*.md" -exec cat {} \;</span>
                 </div>
                 
-                <div class="section-title"># Featured Projects</div>
+                <div id=projects class="section-title"># Featured Projects</div>
                 
                 <div class="project-item">
                     <div class="project-content">
@@ -566,8 +589,9 @@
                         </div>
                     </div>
                     <div class="project-image" onclick="openImageModal('https://raw.githubusercontent.com/vishnuvrj7/portfolio/main/img/1.png')">
-                      <img src="https://raw.githubusercontent.com/vishnuvrj7/portfolio/main/img/1.png" alt="CryptoGuardML Screenshot" onerror="this.parentElement.innerHTML='<div class=project-image-placeholder>🛡️<br>Add your project<br>screenshot here</div>'">
-                  </div>
+                        <img src="https://raw.githubusercontent.com/vishnuvrj7/portfolio/main/img/1.png" alt="CryptoGuardML Screenshot" onerror="this.parentElement.innerHTML='<div class=project-image-placeholder>🛡️<br>Add your project<br>screenshot here</div>'">
+                    </div>
+                    
                 </div>
 
                 <div class="project-item">
@@ -589,27 +613,6 @@
                         <img src="https://raw.githubusercontent.com/vishnuvrj7/portfolio/main/img/2.png" alt="VulnHunt Screenshot" onerror="this.parentElement.innerHTML='<div class=project-image-placeholder>🔍<br>Add your project<br>screenshot here</div>'">
                     </div>
                 </div>
-
-                <div class="project-item">
-                    <div class="project-content">
-                        <div class="project-title">
-                            🏖️ Sandbox-Extension
-                        </div>
-                        <div class="project-desc">
-                            Sandboxed browser extension that allows users to open links in a secure environment, 
-                            ensuring safe browsing without affecting the primary system or browsing experience.
-                        </div>
-                        <div class="project-tech">Tech Stack: JavaScript • Browser Extension • Sandboxing • Security</div>
-                        <div class="project-links">
-                            <a href="https://github.com/vishnuvrj7/Sandbox-Extension" target="_blank" class="project-link">GitHub</a>
-                            <a href="#" class="project-link">Install</a>
-                        </div>
-                    </div>
-                    <div class="project-image" onclick="openImageModal('https://via.placeholder.com/400x240/1a1a1a/4ecdc4?text=Sandbox+Extension+UI')">
-                        <img src="https://via.placeholder.com/400x240/1a1a1a/4ecdc4?text=Sandbox+Extension+UI" alt="Sandbox Extension Screenshot" onerror="this.parentElement.innerHTML='<div class=project-image-placeholder>🏖️<br>Add your project<br>screenshot here</div>'">
-                    </div>
-                </div>
-
                 <div class="project-item">
                     <div class="project-content">
                         <div class="project-title">
@@ -632,6 +635,24 @@
 
                 <div class="project-item">
                     <div class="project-content">
+                        <div class="project-title">
+                            🎓 PyGuard
+                        </div>
+                        <div class="project-desc">
+                            A python-based Intrusion Detection System (IDS) designed to monitor network traffic and detect potential intrusions or suspicious activities.
+                        </div>
+                        <div class="project-tech">Tech Stack: Python • Security • IDS</div>
+                        <div class="project-links">
+                            <a href="https://github.com/vishnuvrj7/pyguard" target="_blank" class="project-link">Visit Site</a>
+                            <a href="#" class="project-link">Documentation</a>
+                        </div>
+                    </div>
+                    <div class="project-image" onclick="openImageModal('https://raw.githubusercontent.com/vishnuvrj7/portfolio/main/img/5.png')">
+                        <img src="https://raw.githubusercontent.com/vishnuvrj7/portfolio/main/img/5.png" alt="Freelearniverse Screenshot" onerror="this.parentElement.innerHTML='<div class=project-image-placeholder>🎓<br>Add your project<br>screenshot here</div>'">
+                    </div>
+                </div>
+                <div class="project-item">
+                    <div class="project-content">
                         <div class="project-title">🚩 Custom CTF Platform</div>
                         <div class="project-desc">
                             Designed and implemented customized Capture The Flag challenges for college competitions, 
@@ -643,8 +664,8 @@
                             <a href="#" class="project-link">Challenges</a>
                         </div>
                     </div>
-                    <div class="project-image" onclick="openImageModal('https://via.placeholder.com/400x240/1a1a1a/ff6b6b?text=CTF+Platform+Interface')">
-                        <img src="https://via.placeholder.com/400x240/1a1a1a/ff6b6b?text=CTF+Platform+Interface" alt="CTF Platform Screenshot" onerror="this.parentElement.innerHTML='<div class=project-image-placeholder>🚩<br>Add your project<br>screenshot here</div>'">
+                    <div class="project-image" onclick="openImageModal('https://raw.githubusercontent.com/vishnuvrj7/portfolio/main/img/6.png')">
+                        <img src="https://raw.githubusercontent.com/vishnuvrj7/portfolio/main/img/6.png" alt="CTF Platform Screenshot" onerror="this.parentElement.innerHTML='<div class=project-image-placeholder>🚩<br>Add your project<br>screenshot here</div>'">
                     </div>
                 </div>
             </div>
@@ -655,7 +676,7 @@
                     <span class="command">cat contact/info.txt</span>
                 </div>
                 
-                <div class="section-title"># Get In Touch</div>
+                <div id=contact class="section-title"># Get In Touch</div>
                 <div class="contact-info">
                     <div class="contact-item">
                         <span class="contact-icon">📧</span>
@@ -663,11 +684,11 @@
                     </div>
                     <div class="contact-item">
                         <span class="contact-icon">🐙</span>
-                        <a href="https://github.com/vishnuvrj7" class="contact-link">github.com/vishnuvrj7</a>
+                        <a href="https://github.com/vishnuvrj7" class="contact-link">github/vishnuvrj</a>
                     </div>
                     <div class="contact-item">
                         <span class="contact-icon">💼</span>
-                        <a href="https://linkedin.com/in/vishnuvrj" class="contact-link">linkedin.com/in/vishnuvrj</a>
+                        <a href="https://linkedin.com/in/vishnuvrj" class="contact-link">linkedin/vishnuvrj</a>
                     </div>
                     <div class="contact-item">
                         <span class="contact-icon">📍</span>
