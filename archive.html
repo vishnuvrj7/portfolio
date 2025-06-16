@@ -174,6 +174,26 @@
             font-size: 10px;
             margin-bottom: 8px;
         }
+        .project-links {
+            margin-top: 10px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .project-link {
+            color: #00ffff;
+            text-decoration: none;
+            font-size: 12px;
+            padding: 4px 8px;
+            border: 1px solid #00ffff;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+        .project-link:hover {
+            background: #00ffff;
+            color: #000;
+        }
 
         .project-status {
             font-size: 10px;
@@ -330,22 +350,26 @@
 
             <div class="command-tip">
                 💡 <span class="highlight">Tip:</span> This archive showcases my cybersecurity projects, tools, and learning journey.
-                <br>🔗 <a href="index.html" class="back-link">cd ../portfolio</a>
+                <br>🔗 <a href="whoami.html" class="back-link">cd ../portfolio</a>
             </div>
 
             <div class="section-title">🚀 Featured Projects</div>
 
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-header">
-                        <span class="project-icon">🤖</span>
-                        <span class="project-title">AI Phishing Detector</span>
+            <div class="project-card">
+                <div class="project-header">
+                    <span class="project-icon">🏖️</span>
+                    <span class="project-title">Sandbox-Extension</span>
                     </div>
                     <div class="project-desc">
-                        ML model using NLP to detect phishing emails and malicious URLs with behavioral analysis.
+                        Sandboxed browser extension that allows users to open links in a secure environment, 
+                        ensuring safe browsing without affecting the primary system or browsing experience.
                     </div>
-                    <div class="project-tech">Python • TensorFlow • NLP • Scikit-learn</div>
-                    <div class="project-status status-experimental">Experimental</div>
+                    <div class="project-tech">Tech Stack: JavaScript • Browser Extension • Sandboxing • Security</div>
+                    <div class="project-links">
+                        <a href="https://github.com/vishnuvrj7/Sandbox-Extension" target="_blank" class="project-link">GitHub</a>
+                        <a href="#" class="project-link">Install</a>
+                        <div class="project-status status-archived">Archived</div>
+                    </div>
                 </div>
 
                 <div class="project-card">
@@ -357,7 +381,12 @@
                         CLI tool that analyzes password strength using entropy calculations and pattern recognition.
                     </div>
                     <div class="project-tech">Python • Regex • Entropy Analysis • CLI</div>
-                    <div class="project-status status-archived">Archived</div>
+                    <div class="project-links">
+                        <a href="https://github.com/vishnuvrj7/passentropy" target="_blank" class="project-link">GitHub</a>
+                        <a href="#" class="project-link">Install</a>
+                        <div class="project-status status-archived">Archived</div>
+                    </div>
+                    
                 </div>
 
                 <div class="project-card">
@@ -441,7 +470,7 @@
             <div style="color: #cccccc; margin: 20px 0;">
                 Thanks for exploring my archive! 🚀
                 <br><br>
-                <a href="index.html" class="back-link">← Back to main portfolio</a>
+                <a href="whoami.html" class="back-link">← Back to main portfolio</a>
             </div>
         </div>
     </div>
