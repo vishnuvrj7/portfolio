@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Playground</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0c0c0c;
+            color: #00ff00;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        .terminal {
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #1e1e1e;
+            border-radius: 8px 8px 0 0;
+            border: 1px solid #333;
+            justify-content: space-between; /* Added to position elements */
+        }
+
+        .terminal-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .terminal-nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-link {
+            color: #888;
+            text-decoration: none;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+
+        .nav-link:hover {
+            color: #ffff00;
+            background: rgba(0, 255, 0, 0.1);
+        }
+    
+
+        .terminal-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .btn.close { background: #ff5f56; }
+        .btn.minimize { background: #ffbd2e; }
+        .btn.maximize { background: #27ca3f; }
+
+        .terminal-title {
+            margin-left: 15px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .terminal-body {
+            background: #0c0c0c;
+            border: 1px solid #333;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 20px;
+            min-height: calc(100vh - 100px);
+        }
+
+        .prompt {
+            color: #00ff00;
+            margin-bottom: 10px;
+        }
+
+        .user { color: #fff000; }
+        .at { color: #ffffff; }
+        .host { color: #00ffff; }
+        .path { color: #ffa600; }
+        .dollar { color: #ffffff; }
+
+        .command {
+            color: #ffffff;
+            margin-left: 10px;
+        }
+
+        .output {
+            margin: 10px 0 20px 0;
+            color: #cccccc;
+        }
+
+        .command-input {
+            display: flex;
+            align-items: center;
+            margin-top: 30px;
+            position: sticky;
+            bottom: 20px;
+            background: #0c0c0c;
+            padding: 10px 0;
+        }
+
+        .input-prompt {
+            color: #00ff00;
+            margin-right: 10px;
+        }
+
+        #commandLine {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            outline: none;
+            flex: 1;
+        }
+
+        .cursor {
+            color: #00ff00;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.05;
+        }
+
+        .ascii-art {
+            color: #ff6b6b;
+            font-size: 10px;
+            line-height: 1.2;
+            margin: 20px 0;
+            white-space: pre;
+        }
+    </style>
+</head>
+<body>
+    <canvas class="matrix-bg" id="matrixCanvas"></canvas>
+    
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="terminal-left">
+                <div class="terminal-buttons">
+                    <div class="btn close"></div>
+                    <div class="btn minimize"></div>
+                    <div class="btn maximize"></div>
+                </div>
+                <div class="terminal-title">user@playground: ~/terminal</div>
+            </div>
+            <div class="terminal-nav">
+                <a href="whoami.html" class="nav-link">home</a>
+                <a href="archive.html" class="nav-link">archive</a>
+                <a href="playground.html" class="nav-link">playground</a>
+                <a href="https://drive.google.com/file/d/1hDUdgrakE27DyZenZemIpaqLMuie7K44/view?usp=drive_link" class="nav-link">resume</a>
+            </div>
+        </div>
+        
+        <div class="terminal-body">
+            <div class="ascii-art">
+  _____  _                                             _ 
+ |  __ \| |                                           | |
+ | |__) | | __ _ _   _  __ _ _ __ ___  _   _ _ __   __| |
+ |  ___/| |/ _` | | | |/ _` | '__/ _ \| | | | '_ \ / _` |
+ | |    | | (_| | |_| | (_| | | | (_) | |_| | | | | (_| |
+ |_|    |_|\__,_|\__, |\__, |_|  \___/ \__,_|_| |_|\__,_|
+                  __/ | __/ |                            
+                 |___/ |___/                             
+            </div>
+            
+            <div class="prompt">
+                <span class="user">user</span><span class="at">@</span><span class="host">playground</span>:<span class="path">~/terminal</span><span class="dollar">$</span>
+                <span class="command">echo "Welcome to the Terminal Playground!"</span>
+            </div>
+            
+            <div class="output">
+                Welcome to the Terminal Playground!
+            </div>
+
+            <div class="command-input">
+                <span class="input-prompt">
+                    <span class="user">user</span><span class="at">@</span><span class="host">playground</span>:<span class="path">~/terminal</span><span class="dollar">$</span>
+                </span>
+                <input type="text" id="commandLine" placeholder="Type 'help' for available commands">
+                <span class="cursor">█</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Matrix background effect
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+    
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    
+        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
+        const matrixArray = matrix.split("");
+    
+        const fontSize = 10;
+        const columns = canvas.width / fontSize;
+    
+        const drops = [];
+        for (let x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+    
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+            ctx.fillStyle = '#00FF00';
+            ctx.font = fontSize + 'px monospace';
+    
+            for (let i = 0; i < drops.length; i++) {
+                const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+    
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+    
+        setInterval(drawMatrix, 35);
+
+        // Command line functionality
+        const commandLine = document.getElementById('commandLine');
+        const commands = {
+            'help': `Available commands:
+    help       - Show this help message
+    ls         - List directory contents
+    pwd        - Print working directory
+    whoami     - Display current user
+    date       - Show current date and time
+    echo [text] - Display text
+    cd [dir]   - Change directory (archive, home, portfolio, resume)
+    clear      - Clear the terminal`,
+            
+            'ls': `documents/    images/    projects/    games/    notes.txt    archive/    home/    portfolio/    resume.sh`,
+            
+            'pwd': `/home/user/terminal`,
+            
+            'whoami': `user - Terminal Playground User`,
+            
+            'date': () => new Date().toString(),
+            
+            'clear': 'CLEAR_SCREEN',
+
+            'cd': (dir) => {
+                if (!dir) return "Please specify a directory";
+                
+                switch(dir.toLowerCase()) {
+                    case 'archive':
+                        window.location.href = 'archive.html';
+                        return "Navigating to archive...";
+                    case 'home':
+                    case 'portfolio':
+                        window.location.href = 'whoami.html';
+                        return "Navigating to portfolio...";
+                    case 'resume':
+                        window.location.href = 'https://drive.google.com/file/d/1hDUdgrakE27DyZenZemIpaqLMuie7K44/view?usp=drive_link';
+                        return "Opening resume...";
+                    default:
+                        return `cd: ${dir}: No such directory`;
+                }
+            }
+        };
+    
+        commandLine.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const commandInput = this.value.trim();
+                const commandParts = commandInput.split(' ');
+                const command = commandParts[0].toLowerCase();
+                const args = commandParts.slice(1).join(' ');
+                
+                const output = document.createElement('div');
+                
+                // Add command prompt
+                const promptDiv = document.createElement('div');
+                promptDiv.className = 'prompt';
+                promptDiv.innerHTML = `<span class="user">user</span><span class="at">@</span><span class="host">playground</span>:<span class="path">~/terminal</span><span class="dollar">$</span> <span class="command">${this.value}</span>`;
+                
+                if (command === 'clear') {
+                    document.querySelector('.terminal-body').innerHTML = `
+                        <div class="prompt">
+                            <span class="user">user</span><span class="at">@</span><span class="host">playground</span>:<span class="path">~/terminal</span><span class="dollar">$</span>
+                        </div>
+                        <div class="command-input">
+                            <span class="input-prompt">
+                                <span class="user">user</span><span class="at">@</span><span class="host">playground</span>:<span class="path">~/terminal</span><span class="dollar">$</span>
+                            </span>
+                            <input type="text" id="commandLine" placeholder="Type 'help' for available commands">
+                            <span class="cursor">█</span>
+                        </div>
+                    `;
+                    // Re-attach event listener
+                    document.getElementById('commandLine').addEventListener('keypress', arguments.callee);
+                } else {
+                    const outputDiv = document.createElement('div');
+                    outputDiv.className = 'output';
+                    
+                    if (command === 'echo') {
+                        outputDiv.innerHTML = `<pre>${args}</pre>`;
+                    } else if (command === 'cd') {
+                        const result = commands.cd(args);
+                        outputDiv.innerHTML = `<pre>${result}</pre>`;
+                    } else if (commands[command]) {
+                        if (typeof commands[command] === 'function') {
+                            outputDiv.innerHTML = `<pre>${commands[command]()}</pre>`;
+                        } else {
+                            outputDiv.innerHTML = `<pre>${commands[command]}</pre>`;
+                        }
+                    } else if (command) {
+                        outputDiv.innerHTML = `<span style="color: #ff6b6b;">bash: ${command}: command not found</span><br>Type 'help' to see available commands.`;
+                    }
+                    
+                    // Insert before command input
+                    const commandInputDiv = document.querySelector('.command-input');
+                    commandInputDiv.parentNode.insertBefore(promptDiv, commandInputDiv);
+                    commandInputDiv.parentNode.insertBefore(outputDiv, commandInputDiv);
+                }
+                
+                this.value = '';
+                this.scrollIntoView();
+            }
+        });
+    
+        // Auto-focus on command line
+        commandLine.focus();
+        
+        // Prevent losing focus
+        document.addEventListener('click', () => {
+            commandLine.focus();
+        });
+    
+        // Window resize handler for matrix
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
