@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>user@portfolio:~$ Terminal Portfolio</title>
+    <title>vishnu@portfolio:~$ Terminal Portfolio</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&display=swap');
         
@@ -36,8 +36,33 @@
             background: #1e1e1e;
             border-radius: 8px 8px 0 0;
             border: 1px solid #333;
+            justify-content: space-between; /* Added to position elements */
         }
 
+        .terminal-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .terminal-nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-link {
+            color: #888;
+            text-decoration: none;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+
+        .nav-link:hover {
+            color: #ffff00;
+            background: rgba(0, 255, 0, 0.1);
+        }
+        
         .terminal-buttons {
             display: flex;
             gap: 8px;
@@ -90,7 +115,7 @@
         }
 
         .ascii-art {
-            color: #00ff00;
+            color: #fff000;
             font-size: 10px;
             line-height: 1.2;
             margin: 20px 0;
@@ -430,12 +455,19 @@
     
     <div class="terminal">
         <div class="terminal-header">
-            <div class="terminal-buttons">
-                <div class="btn close"></div>
-                <div class="btn minimize"></div>
-                <div class="btn maximize"></div>
+            <div class="terminal-left">
+                <div class="terminal-buttons">
+                    <div class="btn close"></div>
+                    <div class="btn minimize"></div>
+                    <div class="btn maximize"></div>
+                </div>
+                <div class="terminal-title">vishnu@portfolio: ~</div>
             </div>
-            <div class="terminal-title">vishnu@portfolio: ~</div>
+            <div class="terminal-nav">
+                <a href="archive.html" class="nav-link">archive</a>
+                <a href="playground.html" class="nav-link">playground</a>
+                <a href="https://drive.google.com/file/d/1hDUdgrakE27DyZenZemIpaqLMuie7K44/view?usp=drive_link" class="nav-link">resume</a>
+            </div>
         </div>
         
         <div class="terminal-body">
@@ -478,12 +510,7 @@
                 <div>
                     <a href="#contact" class="no-color-change">drwxr-xr-x  2 user user 4096 Jun 14 2025 contact/</a>
                 </div>
-                <div>
-                    <a href="https://drive.google.com/file/d/1hDUdgrakE27DyZenZemIpaqLMuie7K44/view?usp=drive_link" class="no-color-change">-rwxr-xr-x  1 user user 2048 Jun 14 2025 resume.sh*</a>
-                </div>
-                <div>
-                    <a href="archive.html" class="no-color-change">drwxr-xr-x  2 user user 4096 Jun 14 2025 archive/</a>
-                </div>
+
             </div>
 
             <div class="section">
@@ -572,7 +599,7 @@
                 </div>
                 
                 <div id=projects class="section-title"># Featured Projects</div>
-                <div class="project-item">
+                                <div class="project-item">
                     <div class="project-content">
                         <div class="project-title">
                             CableNetMonitor - Network Monitoring System
@@ -589,8 +616,8 @@
                     <div class="project-image" onclick="openImageModal('https://raw.githubusercontent.com/vishnuvrj7/portfolio/main/img/6.png')">
                         <img src="https://raw.githubusercontent.com/vishnuvrj7/portfolio/main/img/6.png" alt="CableNetMonitor Screenshot" onerror="this.parentElement.innerHTML='<div class=project-image-placeholder>🛡️<br>Add your project<br>screenshot here</div>'">
                     </div>
-                    
                 </div>
+
                 <div class="project-item">
                     <div class="project-content">
                         <div class="project-title">
@@ -600,10 +627,10 @@
                             Machine learning-powered tool to detect cryptojacking attempts by monitoring system resource usage 
                             and network activity patterns. Includes browser extension, web application, and Python terminal script.
                         </div>
-                        <div class="project-tech">Tech Stack: Python • CLI • JavaScript • Machine Learning </div>
+                        <div class="project-tech">Tech Stack: Python • Flask • JavaScript • Machine Learning • Browser Extension</div>
                         <div class="project-links">
                             <a href="https://github.com/vishnuvrj7/CryptoGuardML" target="_blank" class="project-link">GitHub</a>
-                            <a href="https://github.com/vishnuvrj7/CryptoGuardML/blob/main/README.md" class="project-link">Documentation</a>
+                            <a href="https://github.com/vishnuvrj7/CryptoGuardML/blob/main/README.md" class="project-link">Live Demo</a>
                         </div>
                     </div>
                     <div class="project-image" onclick="openImageModal('https://raw.githubusercontent.com/vishnuvrj7/portfolio/main/img/1.png')">
@@ -643,7 +670,7 @@
                         <div class="project-tech">Tech Stack: Web Development • Content Creation • Educational Platform</div>
                         <div class="project-links">
                             <a href="https://freelearniverse.wordpress.com" target="_blank" class="project-link">Visit Site</a>
-                            <a href="#" class="project-link">Blog</a>
+                            <a href="https://freelearniverse.wordpress.com/about-me/" class="project-link">Blog</a>
                         </div>
                     </div>
                     <div class="project-image" onclick="openImageModal('https://raw.githubusercontent.com/vishnuvrj7/portfolio/main/img/4.png')">
@@ -661,7 +688,7 @@
                         </div>
                         <div class="project-tech">Tech Stack: Python • Security • IDS</div>
                         <div class="project-links">
-                            <a href="https://github.com/vishnuvrj7/pyguard" target="_blank" class="project-link">Visit Site</a>
+                            <a href="https://github.com/vishnuvrj7/pyguard" target="_blank" class="project-link">GitHub</a>
                             <a href="https://github.com/vishnuvrj7/pyguard/blob/main/README.md" class="project-link">Documentation</a>
                         </div>
                     </div>
@@ -678,11 +705,10 @@
                         </div>
                         <div class="project-tech">Tech Stack: Security Challenges • Web Security • Cryptography • Challenge Design</div>
                         <div class="project-links">
-                            <a href="# Get In Touch" class="project-link">contact-me</a>
-                           
+                            <a href="#contact" class="project-link">Contact tMe</a>
                         </div>
                     </div>
-                    <div class="project-image" onclick="openImageModal('https://raw.githubusercontent.com/vishnuvrj7/portfolio/main/img/.png')">
+                    <div class="project-image" onclick="openImageModal('https://raw.githubusercontent.com/vishnuvrj7/portfolio/main/img/6.png')">
                         <img src="https://raw.githubusercontent.com/vishnuvrj7/portfolio/main/img/.png" alt="CTF Platform Screenshot" onerror="this.parentElement.innerHTML='<div class=project-image-placeholder>🚩<br>Add your project<br>screenshot here</div>'">
                     </div>
                 </div>
@@ -717,14 +743,6 @@
                         <a href="https://drive.google.com/file/d/1hDUdgrakE27DyZenZemIpaqLMuie7K44/view?usp=drive_link" class="contact-link">resume</a>                     
                     </div>
                 </div>
-            </div>
-
-            <div class="command-input">
-                <span class="input-prompt">
-                    <span class="user">user</span><span class="at">@</span><span class="host">portfolio</span>:<span class="path">~</span><span class="dollar">$</span>
-                </span>
-                <input type="text" id="commandLine" placeholder="Type 'help' for available commands">
-                <span class="cursor">█</span>
             </div>
         </div>
     </div>
@@ -797,102 +815,11 @@
             }
         });
     
-        // Command line functionality
-        const commandLine = document.getElementById('commandLine');
-        const commands = {
-            'help': `Available commands:
-    help       - Show this help message
-    ls         - List directory contents
-    pwd        - Print working directory
-    whoami     - Display current user
-    cd archive - Go to project archive
-    date       - Show current date and time
-    screenshot - Take a screenshot of projects
-    clear      - Clear the terminal`,
-            
-            'ls': `about/     skills/    projects/   archive/   contact/   resume.sh*`,
-            
-            'pwd': `/home/user`,
-            
-            'whoami': `vishnu - Cybersecurity Specialist & Ethical Hacker`,
-            
-            'date': () => new Date().toString(),
-            
-            'screenshot': `📸 Project screenshots loaded successfully!
-Click on any project image to view in full size.`,
-            
-            'cd archive': () => {
-                window.location.href = 'archive.html';
-                return 'Navigating to archive...';
-            },
-            
-            'clear': 'CLEAR_SCREEN'
-        };
-    
-        commandLine.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const command = this.value.trim().toLowerCase();
-                const output = document.createElement('div');
-                
-                // Add command prompt
-                const promptDiv = document.createElement('div');
-                promptDiv.className = 'prompt';
-                promptDiv.innerHTML = `<span class="user">user</span><span class="at">@</span><span class="host">portfolio</span>:<span class="path">~</span><span class="dollar">$</span> <span class="command">${this.value}</span>`;
-                
-                if (command === 'clear') {
-                    document.querySelector('.terminal-body').innerHTML = `
-                        <div class="prompt">
-                            <span class="user">user</span><span class="at">@</span><span class="host">portfolio</span>:<span class="path">~</span><span class="dollar">$</span>
-                        </div>
-                        <div class="command-input">
-                            <span class="input-prompt">
-                                <span class="user">user</span><span class="at">@</span><span class="host">portfolio</span>:<span class="path">~</span><span class="dollar">$</span>
-                            </span>
-                            <input type="text" id="commandLine" placeholder="Type 'help' for available commands">
-                            <span class="cursor">█</span>
-                        </div>
-                    `;
-                    // Re-attach event listener
-                    document.getElementById('commandLine').addEventListener('keypress', arguments.callee);
-                } else {
-                    const outputDiv = document.createElement('div');
-                    outputDiv.className = 'output';
-                    
-                    if (commands[command]) {
-                        if (typeof commands[command] === 'function') {
-                            outputDiv.innerHTML = `<pre>${commands[command]()}</pre>`;
-                        } else {
-                            outputDiv.innerHTML = `<pre>${commands[command]}</pre>`;
-                        }
-                    } else if (command) {
-                        outputDiv.innerHTML = `<span style="color: #ff6b6b;">bash: ${command}: command not found</span><br>Type 'help' to see available commands.`;
-                    }
-                    
-                    // Insert before command input
-                    const commandInput = document.querySelector('.command-input');
-                    commandInput.parentNode.insertBefore(promptDiv, commandInput);
-                    commandInput.parentNode.insertBefore(outputDiv, commandInput);
-                }
-                
-                this.value = '';
-                this.scrollIntoView();
-            }
-        });
-    
-        // Auto-focus on command line
-        commandLine.focus();
-        
-        // Prevent losing focus
-        document.addEventListener('click', () => {
-            commandLine.focus();
-        });
-    
         // Window resize handler for matrix
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         });
-    </script>
-    
+    </script>   
 </body>
 </html>

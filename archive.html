@@ -29,6 +29,12 @@
             margin: 0 auto;
         }
 
+        .terminal-title {
+            margin-left: 15px;
+            font-size: 12px;
+            color: #888;
+        }
+        
         .terminal-header {
             display: flex;
             align-items: center;
@@ -37,6 +43,31 @@
             background: #1a1a1a;
             border-radius: 8px 8px 0 0;
             border: 1px solid #333;
+            justify-content: space-between; /* Added to position elements */
+        }
+        
+        .terminal-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .terminal-nav {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-link {
+            color: #888;
+            text-decoration: none;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+        
+        .nav-link:hover {
+            color: #ffff00;
+            background: rgba(0, 255, 0, 0.1);
         }
 
         .terminal-buttons {
@@ -298,12 +329,20 @@
     
     <div class="terminal">
         <div class="terminal-header">
-            <div class="terminal-buttons">
-                <div class="btn close"></div>
-                <div class="btn minimize"></div>
-                <div class="btn maximize"></div>
+            <div class="terminal-left">
+                <div class="terminal-buttons">
+                    <div class="btn close"></div>
+                    <div class="btn minimize"></div>
+                    <div class="btn maximize"></div>
+                </div>
+                <div class="terminal-title">vishnu@archive: ~/projects</div>
             </div>
-            <div class="terminal-title">vishnu@archive: ~/projects</div>
+            <div class="terminal-nav">
+                <a href="whoami.html" class="nav-link">home</a>
+                <a href="archive.html" class="nav-link">archive</a>
+                <a href="playground.html" class="nav-link">playground</a>
+                <a href="https://drive.google.com/file/d/1hDUdgrakE27DyZenZemIpaqLMuie7K44/view?usp=drive_link" class="nav-link">resume</a>
+            </div>
         </div>
         
         <div class="terminal-body">
@@ -350,7 +389,7 @@
 
             <div class="command-tip">
                 💡 <span class="highlight">Tip:</span> This archive showcases my cybersecurity projects, tools, and learning journey.
-                <br>🔗 <a href="index.html" class="back-link">cd ../portfolio</a>
+                <br>🔗 <a href="whoami.html" class="back-link">cd ../portfolio</a>
             </div>
 
             <div class="section-title">🚀 Featured Projects</div>
@@ -367,7 +406,7 @@
                     <div class="project-tech">Tech Stack: JavaScript • Browser Extension • Sandboxing • Security</div>
                     <div class="project-links">
                         <a href="https://github.com/vishnuvrj7/Sandbox-Extension" target="_blank" class="project-link">GitHub</a>
-                        <a href="https://github.com/vishnuvrj7/Sandbox-Extension/main/blob/main/README.md" class="project-link">Documentation</a>
+                        <a href="#" class="project-link">Install</a>
                         <div class="project-status status-archived">Archived</div>
                     </div>
                 </div>
@@ -383,7 +422,7 @@
                     <div class="project-tech">Python • Regex • Entropy Analysis • CLI</div>
                     <div class="project-links">
                         <a href="https://github.com/vishnuvrj7/passentropy" target="_blank" class="project-link">GitHub</a>
-                        <a href="https://github.com/vishnuvrj7/passentropy/main/blob/main/README.md" class="project-link">Documentation</a>
+                        <a href="#" class="project-link">Install</a>
                         <div class="project-status status-archived">Archived</div>
                     </div>
                     
@@ -391,19 +430,15 @@
 
                 <div class="project-card">
                     <div class="project-header">
-                        <span class="project-icon">🛡️</span>
-                        <span class="project-title">HeaderGuard - Web Security Scanner</span>
+                        <span class="project-icon">🌐</span>
+                        <span class="project-title">Web Security Scanner</span>
                     </div>
                     <div class="project-desc">
                         Lightweight scanner for missing security headers with automated remediation suggestions.
                     </div>
                     <div class="project-tech">Python • Requests • Security Headers • Web</div>
-                    <div class="project-links">
-                        <a href="https://github.com/vishnuvrj7/HeaderGuard" target="_blank" class="project-link">GitHub</a>
-                        <a href="https://github.com/vishnuvrj7/HeaderGuard/main/blob/main/README.md" class="project-link">Documentation</a>
                     <div class="project-status status-archived">Archived</div>
                 </div>
-            </div>
 
                 <div class="project-card">
                     <div class="project-header">
@@ -414,12 +449,8 @@
                         Automated system collecting threat intelligence from multiple sources with correlation engine.
                     </div>
                     <div class="project-tech">Python • APIs • Data Correlation • Threat Intel</div>
-                    <div class="project-links">
-                        <a href="https://github.com/vishnuvrj7/ThreatIntel/tree/main" target="_blank" class="project-link">GitHub</a>
-                        <a href="https://github.com/vishnuvrj7/ThreatIntel/tree/main/blob/main/README.md" class="project-link">Documentation</a>
                     <div class="project-status status-experimental">Experimental</div>
                 </div>
-            </div>
 
                 <div class="project-card">
                     <div class="project-header">
@@ -430,13 +461,8 @@
                         Collection of solutions for crypto, web exploitation, and forensics challenges with writeups.
                     </div>
                     <div class="project-tech">Python • Cryptography • Web Exploitation • CTF</div>
-
-                    <div class="project-links">
-                        <a href="https://github.com/vishnuvrj7/CTF-Solutions" target="_blank" class="project-link">GitHub</a>
-                        <a href="https://github.com/vishnuvrj7/CTF-Solutions/blob/main/README.md" class="project-link">Documentation</a>
                     <div class="project-status status-learning">Learning</div>
                 </div>
-            </div>
 
                 <div class="project-card">
                     <div class="project-header">
@@ -481,9 +507,8 @@
             </div>
             
             <div style="color: #cccccc; margin: 20px 0;">
-                Thanks for exploring my archive! 🚀
                 <br><br>
-                <a href="index.html" class="back-link">← Back to main portfolio</a>
+                <a href="whoami.html" class="back-link">← Back to main portfolio</a>
             </div>
         </div>
     </div>
