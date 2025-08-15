@@ -12,6 +12,9 @@
             padding: 0;
             box-sizing: border-box;
         }
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
             background: #0a0a0a;
@@ -21,6 +24,39 @@
             line-height: 1.6;
             overflow-x: hidden;
         }
+        html {
+            scroll-behavior: smooth;
+        }
+        /* --- Grainy Noise Effect --- */
+        body::after {
+            content: "";
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            /* Use an inline SVG with a turbulence filter to create the noise */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            opacity: 0.05; /* Adjust for desired intensity */
+            pointer-events: none; /* Allows clicking through the overlay */
+            z-index: 999; /* Position it above content but below modals */
+            animation: grain 8s steps(10, end) infinite;
+        }   
+
+        @keyframes grain {
+            0%, 100% { transform:translate(0, 0) }
+            10% { transform:translate(-5%, -10%) }
+            20% { transform:translate(-15%, 5%) }
+            30% { transform:translate(7%, -25%) }
+            40% { transform:translate(-5%, 25%) }
+            50% { transform:translate(-15%, 10%) }
+            60% { transform:translate(15%, 0%) }
+            70% { transform:translate(0%, 15%) }
+            80% { transform:translate(3%, 35%) }
+            90% { transform:translate(-10%, 10%) }
+        }
+/* --- End of Effect --- */
 
         .terminal {
             min-height: 100vh;
@@ -45,6 +81,30 @@
             border: 1px solid #333;
             justify-content: space-between; /* Added to position elements */
         }
+                /* --- Go To Top Button --- */
+        #goToTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            z-index: 99;
+            font-size: 18px;
+            border: 1px solid #00ff00;
+            outline: none;
+            background-color: #1a1a1a;
+            color: #00ff00;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        #goToTopBtn:hover {
+            background-color: #00ff00;
+            color: #0c0c0c;
+        }
+        /* --- End of Go To Top Button --- */
         
         .terminal-left {
             display: flex;
@@ -325,7 +385,7 @@
     </style>
 </head>
 <body>
-    <canvas class="matrix-bg" id="matrixCanvas"></canvas>
+    <div id="top"></div>
     
     <div class="terminal">
         <div class="terminal-header">
@@ -512,50 +572,44 @@
             </div>
         </div>
     </div>
+    <a href="#top" id="goToTopBtn" title="Go to top">^</a>
 
     <script>
-        // Matrix background effect
-        const canvas = document.getElementById('matrixCanvas');
-        const ctx = canvas.getContext('2d');
+        // --- Go To Top Button Logic ---
+        const goToTopBtn = document.getElementById("goToTopBtn");
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        // When the user scrolls down 100px from the top of the document, show the button
+        window.onscroll = function() {
+            scrollFunction();
+        };
 
-        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*";
-        const matrixArray = matrix.split("");
-        const fontSize = 10;
-        const columns = canvas.width / fontSize;
-        const drops = [];
-
-        for (let x = 0; x < columns; x++) {
-            drops[x] = 1;
-        }
-
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = '#FF6B6B';
-            ctx.font = fontSize + 'px monospace';
-
-            for (let i = 0; i < drops.length; i++) {
-                const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
+        function scrollFunction() {
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                goToTopBtn.style.display = "block";
+            } else {
+                goToTopBtn.style.display = "none";
             }
         }
 
-        setInterval(drawMatrix, 50);
+        // --- Image Modal Logic ---
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImage");
+        const span = document.getElementsByClassName("image-modal-close")[0];
 
-        // Resize canvas on window resize
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
+        function openImageModal(src) {
+            modal.style.display = "block";
+            modalImg.src = src;
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
     </script>
 </body>
 </html>

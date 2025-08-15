@@ -21,6 +21,36 @@
             line-height: 1.5;
             overflow-x: hidden;
         }
+        /* --- Grainy Noise Effect --- */
+        body::after {
+            content: "";
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            /* Use an inline SVG with a turbulence filter to create the noise */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            opacity: 0.05; /* Adjust for desired intensity */
+            pointer-events: none; /* Allows clicking through the overlay */
+            z-index: 999; /* Position it above content but below modals */
+            animation: grain 8s steps(10, end) infinite;
+        }
+
+        @keyframes grain {
+            0%, 100% { transform:translate(0, 0) }
+            10% { transform:translate(-5%, -10%) }
+            20% { transform:translate(-15%, 5%) }
+            30% { transform:translate(7%, -25%) }
+            40% { transform:translate(-5%, 25%) }
+            50% { transform:translate(-15%, 10%) }
+            60% { transform:translate(15%, 0%) }
+            70% { transform:translate(0%, 15%) }
+            80% { transform:translate(3%, 35%) }
+            90% { transform:translate(-10%, 10%) }
+        }
+    /* --- End of Effect --- */
 
         .terminal {
             min-height: 100vh;
@@ -150,17 +180,6 @@
             51%, 100% { opacity: 0; }
         }
 
-        .matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.05;
-        }
-
         .ascii-art {
             color: #ff6b6b;
             font-size: 10px;
@@ -170,9 +189,7 @@
         }
     </style>
 </head>
-<body>
-    <canvas class="matrix-bg" id="matrixCanvas"></canvas>
-    
+<body>    
     <div class="terminal">
         <div class="terminal-header">
             <div class="terminal-left">
@@ -181,7 +198,7 @@
                     <div class="btn minimize"></div>
                     <div class="btn maximize"></div>
                 </div>
-                <div class="terminal-title">user@playground: ~/terminal</div>
+                <div class="terminal-title">vishnu@playground: ~/terminal</div>
             </div>
             <div class="terminal-nav">
                 <a href="index.html" class="nav-link">home</a>
@@ -222,65 +239,49 @@
         </div>
     </div>
 
-    <script>
-        // Matrix background effect
-        const canvas = document.getElementById('matrixCanvas');
-        const ctx = canvas.getContext('2d');
-    
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    
-        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
-        const matrixArray = matrix.split("");
-    
-        const fontSize = 10;
-        const columns = canvas.width / fontSize;
-    
-        const drops = [];
-        for (let x = 0; x < columns; x++) {
-            drops[x] = 1;
-        }
-    
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-            ctx.fillStyle = '#00FF00';
-            ctx.font = fontSize + 'px monospace';
-    
-            for (let i = 0; i < drops.length; i++) {
-                const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-    
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-        }
-    
-        setInterval(drawMatrix, 35);
-
+   <script>
         // Command line functionality
         const commandLine = document.getElementById('commandLine');
         const commands = {
             'help': `Available commands:
-    help       - Show this help message
-    ls         - List directory contents
-    pwd        - Print working directory
-    whoami     - Display current user
-    date       - Show current date and time
-    echo [text] - Display text
-    cd [dir]   - Change directory (archive, home, portfolio, resume)
-    clear      - Clear the terminal`,
+   help         - Show this help message
+   ls           - List directory contents
+   pwd          - Print working directory
+   index        - Display current user
+   date         - Show current date and time
+   echo [text]  - Display text
+   cd [dir]     - Change directory (archive, home, portfolio, resume)
+   cat [file]   - Display file content
+   clear        - Clear the terminal`,
             
-            'ls': `documents/    images/    projects/    games/    notes.txt    archive/    home/    portfolio/    resume.sh`,
+            'ls': `documents/      images/      projects/      games/      notes.txt      archive/      home/      portfolio/      resume.sh`,
             
             'pwd': `/home/user/terminal`,
             
-            'whoami': `user - Terminal Playground User`,
+            'index': `user - Terminal Playground User`,
             
             'date': () => new Date().toString(),
+
+            'cat': (file) => {
+                if (!file) {
+                    return "Usage: cat [file]";
+                }
+                switch (file.toLowerCase()) {
+                    case 'notes.txt':
+                        return `
+Heyy.. and welcome!
+
+This is playground. You can try some of the commands that are available (type "help")
+to navigate to different sections like 'portfolio', 'resume', or 'contact'.
+
+Enjoy exploring!
+`;
+                    case 'resume.sh':
+                        return `wrong command...type "cd resume.sh"';
+                    default:
+                        return `cat: ${file}: No such file or directory`;
+                }
+            },
             
             'clear': 'CLEAR_SCREEN',
 
@@ -295,6 +296,16 @@
                     case 'portfolio':
                         window.location.href = 'index.html';
                         return "Navigating to portfolio...";
+                    case 'contact':
+                        window.location.href = 'index.html#contact';
+                        return "Showing contact info...";
+                    case 'projects':
+                        window.location.href = 'index,html#projects';
+                        return "Showing Projects.."
+                    case 'about':
+                    case 'about me':
+                        window.location.href = 'index.html#about'
+                        return "Showing about.."
                     case 'resume':
                         window.location.href = 'https://drive.google.com/file/d/1hDUdgrakE27DyZenZemIpaqLMuie7K44/view?usp=drive_link';
                         return "Opening resume...";
@@ -342,6 +353,9 @@
                     } else if (command === 'cd') {
                         const result = commands.cd(args);
                         outputDiv.innerHTML = `<pre>${result}</pre>`;
+                    } else if (command === 'cat') {
+                        const result = commands.cat(args);
+                        outputDiv.innerHTML = `<pre>${result}</pre>`;
                     } else if (commands[command]) {
                         if (typeof commands[command] === 'function') {
                             outputDiv.innerHTML = `<pre>${commands[command]()}</pre>`;
@@ -369,12 +383,6 @@
         // Prevent losing focus
         document.addEventListener('click', () => {
             commandLine.focus();
-        });
-    
-        // Window resize handler for matrix
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
         });
     </script>
 </body>

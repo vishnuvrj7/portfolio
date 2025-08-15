@@ -13,6 +13,10 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             background: #0c0c0c;
             color: #00ff00;
@@ -21,6 +25,37 @@
             line-height: 1.5;
             overflow-x: hidden;
         }
+
+        /* --- Grainy Noise Effect --- */
+        body::after {
+            content: "";
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            /* Use an inline SVG with a turbulence filter to create the noise */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            opacity: 0.05; /* Adjust for desired intensity */
+            pointer-events: none; /* Allows clicking through the overlay */
+            z-index: 999; /* Position it above content but below modals */
+            animation: grain 8s steps(10, end) infinite;
+        }
+
+        @keyframes grain {
+          0%, 100% { transform:translate(0, 0) }
+          10% { transform:translate(-5%, -10%) }
+          20% { transform:translate(-15%, 5%) }
+          30% { transform:translate(7%, -25%) }
+          40% { transform:translate(-5%, 25%) }
+          50% { transform:translate(-15%, 10%) }
+          60% { transform:translate(15%, 0%) }
+          70% { transform:translate(0%, 15%) }
+          80% { transform:translate(3%, 35%) }
+          90% { transform:translate(-10%, 10%) }
+        }
+        /* --- End of Effect --- */
 
         .terminal {
             min-height: 100vh;
@@ -365,24 +400,14 @@
             50% { border-color: #00ff00; }
         }
 
-        .matrix-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.1;
-        }
         .no-color-change {
-        color: inherit;
-        text-decoration: none;
-    }
-    .no-color-change:hover, .no-color-change:visited, .no-color-change:active {
-        color: inherit;
-        text-decoration: none;
-    }
+            color: inherit;
+            text-decoration: none;
+        }
+        .no-color-change:hover, .no-color-change:visited, .no-color-change:active {
+            color: inherit;
+            text-decoration: none;
+        }
 
         /* Image modal */
         .image-modal {
@@ -429,6 +454,32 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+        
+        /* --- Go To Top Button --- */
+        #goToTopBtn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            z-index: 99;
+            font-size: 18px;
+            border: 1px solid #00ff00;
+            outline: none;
+            background-color: #1a1a1a;
+            color: #00ff00;
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        #goToTopBtn:hover {
+            background-color: #00ff00;
+            color: #0c0c0c;
+        }
+        /* --- End of Go To Top Button --- */
+
 
         /* Responsive design */
         @media (max-width: 768px) {
@@ -445,8 +496,8 @@
     </style>
 </head>
 <body>
-    <canvas class="matrix-bg" id="matrixCanvas"></canvas>
-    
+    <div id="top"></div>
+
     <!-- Image Modal -->
     <div id="imageModal" class="image-modal">
         <span class="image-modal-close">&times;</span>
@@ -477,12 +528,12 @@
             </div>
             
             <div class="ascii-art">
-    ██╗   ██╗██╗███████╗██╗  ██╗███╗   ██╗██╗   ██╗    ██████╗  █████╗      ██╗
-    ██║   ██║██║██╔════╝██║  ██║████╗  ██║██║   ██║    ██╔══██╗██╔══██╗     ██║
-    ██║   ██║██║███████╗███████║██╔██╗ ██║██║   ██║    ██████╔╝███████║     ██║
-    ╚██╗ ██╔╝██║╚════██║██╔══██║██║╚██╗██║██║   ██║    ██╔══██╗██╔══██║██   ██║
-     ╚████╔╝ ██║███████║██║  ██║██║ ╚████║╚██████╔╝    ██║  ██║██║  ██║╚█████╔╝
-      ╚═══╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝     ╚═╝  ╚═╝╚═╝  ╚═╝ ╚════╝  
+    ██╗   ██╗██╗███████╗██╗  ██╗███╗   ██╗██╗   ██╗     ██████╗  █████╗      ██╗
+    ██║   ██║██║██╔════╝██║  ██║████╗  ██║██║   ██║     ██╔══██╗██╔══██╗     ██║
+    ██║   ██║██║███████╗███████║██╔██╗ ██║██║   ██║     ██████╔╝███████║     ██║
+    ╚██╗ ██╔╝██║╚════██║██╔══██║██║╚██╗██║██║   ██║     ██╔══██╗██╔══██║██   ██║
+     ╚████╔╝ ██║███████║██║  ██║██║ ╚████║╚██████╔╝     ██║  ██║██║  ██║╚█████╔╝
+      ╚═══╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝      ╚═╝  ╚═╝╚═╝  ╚═╝ ╚════╝  
             </div>
 
             <div class="output typing-animation">
@@ -740,86 +791,52 @@
                     </div>
                     <div class="contact-item">                         
                         <span class="contact-icon">⤓</span>                         
-                        <a href="https://drive.google.com/file/d/1hDUdgrakE27DyZenZemIpaqLMuie7K44/view?usp=drive_link" class="contact-link">resume</a>                     
+                        <a href="https://drive.google.com/file/d/1hDUdgrakE27DyZenZemIpaqLMuie7K44/view?usp=drive_link" class="contact-link">resume</a>                       
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <!-- Go To Top Button -->
+    <a href="#top" id="goToTopBtn" title="Go to top">^</a>
 
     <script>
-        // Matrix background effect
-        const canvas = document.getElementById('matrixCanvas');
-        const ctx = canvas.getContext('2d');
-    
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-    
-        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
-        const matrixArray = matrix.split("");
-    
-        const fontSize = 10;
-        const columns = canvas.width / fontSize;
-    
-        const drops = [];
-        for (let x = 0; x < columns; x++) {
-            drops[x] = 1;
-        }
-    
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-            ctx.fillStyle = '#00FF00';
-            ctx.font = fontSize + 'px monospace';
-    
-            for (let i = 0; i < drops.length; i++) {
-                const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-    
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
+        // --- Go To Top Button Logic ---
+        const goToTopBtn = document.getElementById("goToTopBtn");
+
+        // When the user scrolls down 100px from the top of the document, show the button
+        window.onscroll = function() {
+            scrollFunction();
+        };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                goToTopBtn.style.display = "block";
+            } else {
+                goToTopBtn.style.display = "none";
             }
         }
-    
-        setInterval(drawMatrix, 35);
 
-        // Image modal functionality
-        function openImageModal(imageSrc) {
-            const modal = document.getElementById('imageModal');
-            const modalImg = document.getElementById('modalImage');
-            modal.style.display = 'block';
-            modalImg.src = imageSrc;
+        // --- Image Modal Logic ---
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImage");
+        const span = document.getElementsByClassName("image-modal-close")[0];
+
+        function openImageModal(src) {
+            modal.style.display = "block";
+            modalImg.src = src;
         }
 
-        function closeImageModal() {
-            document.getElementById('imageModal').style.display = 'none';
+        span.onclick = function() {
+            modal.style.display = "none";
         }
 
-        // Close modal when clicking the X
-        document.querySelector('.image-modal-close').addEventListener('click', closeImageModal);
-
-        // Close modal when clicking outside the image
-        document.getElementById('imageModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeImageModal();
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
             }
-        });
-
-        // Close modal with Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeImageModal();
-            }
-        });
-    
-        // Window resize handler for matrix
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-    </script>   
+        }
+    </script>
 </body>
 </html>
