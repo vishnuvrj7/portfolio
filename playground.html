@@ -239,7 +239,7 @@
         </div>
     </div>
 
-   <script>
+<script>
         // Command line functionality
         const commandLine = document.getElementById('commandLine');
         const commands = {
@@ -271,13 +271,32 @@
                         return `
 Heyy.. and welcome!
 
-This is playground. You can try some of the commands that are available (type "help")
+This is the terminal playground. You can use the 'cd' command 
+
 to navigate to different sections like 'portfolio', 'resume', or 'contact'.
 
 Enjoy exploring!
 `;
+                    case 'resume':
                     case 'resume.sh':
-                        return `wrong command...type "cd resume.sh"';
+                        return `#!/bin/bash
+# Invalid command. type "cd resume.sh" to open it
+`;
+                    case 'about':
+    return `==========================
+   About Me - readme.txt
+==========================
+
+Hey, I’m just a curious student who loves messing around with code, security, 
+and cool tech stuff. I’ve built things like CTF challenges, a vuln scanner, 
+and even tools that track networks in real time. 
+
+Most of the time, I’m either breaking things (ethically 😅) or fixing them, 
+and learning something new in the process. Always up for experimenting, 
+automating, and finding smarter ways to do stuff.
+
+==========================
+`;
                     default:
                         return `cat: ${file}: No such file or directory`;
                 }
@@ -307,6 +326,7 @@ Enjoy exploring!
                         window.location.href = 'index.html#about'
                         return "Showing about.."
                     case 'resume':
+                    case 'resume.sh' :
                         window.location.href = 'https://drive.google.com/file/d/1hDUdgrakE27DyZenZemIpaqLMuie7K44/view?usp=drive_link';
                         return "Opening resume...";
                     default:
